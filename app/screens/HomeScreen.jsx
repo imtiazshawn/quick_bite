@@ -1,8 +1,8 @@
-import { View, Text, ScrollView, Image, TextInput } from 'react-native';
+import { View, Text, ScrollView, Image, TextInput, TouchableOpacity } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { BellIcon, MagnifyingGlassIcon } from 'react-native-heroicons/outline';
+import { MagnifyingGlassIcon } from 'react-native-heroicons/outline';
 import axios from 'axios';
 
 import Categories from '../components/Categories';
@@ -60,8 +60,15 @@ const HomeScreen = () => {
       >
         {/* Avatar */}
         <View className='mx-4 flex-row justify-between items-center mb-2'>
-          <Image source={require('../../assets/images/avatar.png')} style={{ width: hp(6.5), height: hp(6.5) }} />
-          <BellIcon size={hp(5)} color='gray' />
+          {/* <BellIcon size={hp(5)} color='gray' /> */}
+          <TouchableOpacity className='bg-white p-3 rounded-lg'>
+            <View className='h-1 w-3 bg-black'></View>
+            <View className='mt-1 h-1 w-6 bg-black'></View>
+            <View className='ml-3 mt-1 h-1 w-3 bg-black'></View>
+          </TouchableOpacity>
+          <TouchableOpacity className='bg-white rounded-lg'>
+            <Image source={require('../../assets/images/avatar.png')} style={{ width: hp(6.5), height: hp(6.5) }} />
+          </TouchableOpacity>
         </View>
 
         {/* Greetings */}

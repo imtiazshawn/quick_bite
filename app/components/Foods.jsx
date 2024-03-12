@@ -45,7 +45,7 @@ const Foods = ({ foods, categories }) => {
                     marginBottom: 20,
                     padding: 10,
                   }}
-                  onPress={() => navigation.navigate('Login', { ...item })}
+                  onPress={() => navigation.navigate('FoodDetail', { ...item })}
                 >
                   <Image
                     source={{ uri: item.strMealThumb }}

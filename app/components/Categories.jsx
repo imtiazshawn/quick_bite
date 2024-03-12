@@ -41,18 +41,10 @@ const Categories = ({ categories, activeCategory, handleChangeCategory }) => {
                     <View>
                         <TouchableOpacity
                             onPress={() => handleChangeCategory(cat.strCategory)}
-                            className='bg-amber-400 rounded-full items-center justify-between shadow-2xl'
+                            className='bg-amber-400 rounded-full items-center justify-between border border-slate-200'
                             style={{
                                 height: hp(16),
                                 width: wp(16),
-                                // shadowColor: '#000',
-                                // shadowOffset: {
-                                //     width: 0,
-                                //     height: 2,
-                                // },
-                                // shadowOpacity: 0.25,
-                                // shadowRadius: 3.84,
-                                // elevation: 5,
                             }}
                         >
                             <Text className='text-white mt-6 break-words' style={{ fontSize: hp(1.6) }}>{cat.strCategory}</Text>
@@ -69,18 +61,10 @@ const Categories = ({ categories, activeCategory, handleChangeCategory }) => {
                     <View>
                         <TouchableOpacity
                             onPress={() => handleChangeCategory(cat.strCategory)}
-                            className='bg-white rounded-full flex-col justify-between items-center shadow-2xl'
+                            className='bg-white rounded-full flex-col justify-between items-center shadow-2xl border border-slate-200'
                             style={{ 
                               height: hp(16), 
-                              width: wp(16),
-                              shadowColor: '#000',
-                              shadowOffset: {
-                                  width: 0,
-                                  height: 2,
-                              },
-                              shadowOpacity: 0.25,
-                              shadowRadius: 3.84,
-                              elevation: 10,
+                              width: wp(16)
                             }}
                         >
                             <View className='rounded-full p-[6px] '>
