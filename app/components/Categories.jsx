@@ -41,7 +41,7 @@ const Categories = ({ categories, activeCategory, handleChangeCategory }) => {
                     <View>
                         <TouchableOpacity
                             onPress={() => handleChangeCategory(cat.strCategory)}
-                            className='bg-amber-400 rounded-full items-center justify-between border border-slate-200'
+                            className='bg-amber-400 rounded-full items-center justify-between shadow-sm border border-slate-200'
                             style={{
                                 height: hp(16),
                                 width: wp(16),
@@ -61,7 +61,7 @@ const Categories = ({ categories, activeCategory, handleChangeCategory }) => {
                     <View>
                         <TouchableOpacity
                             onPress={() => handleChangeCategory(cat.strCategory)}
-                            className='bg-white rounded-full flex-col justify-between items-center shadow-2xl border border-slate-200'
+                            className='bg-white rounded-full flex-col justify-between items-center shadow-sm border border-slate-200'
                             style={{ 
                               height: hp(16), 
                               width: wp(16)

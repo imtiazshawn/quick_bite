@@ -70,19 +70,11 @@ const Foods = ({ foods, categories }) => {
                         : item.strMeal}
                     </Text>
                     <Text style={{ marginBottom: 5 }}>Chap with Salad</Text>
-                    <Text style={{ fontWeight: 'bold' }}>200$</Text>
                   </View>
-                  <TouchableOpacity
-                    className='bg-[#4CAF50]'
-                    style={{
-                      backgroundColor: '#4CAF50',
-                      paddingVertical: 10,
-                      paddingHorizontal: 20,
-                      borderRadius: 20,
-                    }}
-                  >
-                    <Text className='text-white font-bold'>Add to Cart</Text>
-                  </TouchableOpacity>
+                  <View className='flex-row items-center'>
+                    <Text className='font-semibold text-[#f9c22d]' style={{ fontSize: hp(2.5) }}>$</Text>
+                    <Text className='font-semibold' style={{ fontSize: hp(2.5) }}>10.00</Text>
+                  </View>
                 </Pressable>
               </Animated.View>
             ))}

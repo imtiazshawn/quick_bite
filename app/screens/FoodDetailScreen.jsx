@@ -1,16 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image, TouchableOpacity, ScrollView } from 'react-native';
-// import { FontAwesome } from '@expo/vector-icons';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { ChevronLeftIcon, MinusIcon, PlusIcon } from 'react-native-heroicons/outline';
 import { ClockIcon, FireIcon, HeartIcon } from 'react-native-heroicons/solid';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useCartStore } from '../../stores/CartStore';
+import { useFavouriteStore } from '../../stores/FavouriteStore';
 
 
 const FoodDetailScreen = (props) => {
   const [foodData, setFoodData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
+  const [isFavourite, setIsFavourite] = useState(false);
+  const addToCart = useCartStore((state) => state.addToCart); 
+  const favourites = useFavouriteStore((state) => state.favourites); 
+
   const item = props.route.params;
 
   useEffect(() => {
@@ -30,6 +35,18 @@ const FoodDetailScreen = (props) => {
     }
   }
 
+  // Add To Cart Functionality
+  const handleAddToCart = () => {
+    addToCart({ ...item, quantity });
+  }
+  
+  // Add to Favourites
+  const handleFavourites = () => {
+    setIsFavourite(!isFavourite)
+    favourites({ ...item, quantity });
+
+  }
+
   return (
     <ScrollView>
       <SafeAreaView className='flex-1 items-center bg-[#f9f9f9] relative'>
@@ -43,8 +60,9 @@ const FoodDetailScreen = (props) => {
           </TouchableOpacity>
           <TouchableOpacity
             className='bg-white p-3 rounded-lg mr-6'
+            onPress={handleFavourites}
           >
-            <HeartIcon size={24} color="red" />
+            <HeartIcon size={hp(3.5)} strokeWidth={4.5} color={isFavourite ? 'red' : 'gray'} />
           </TouchableOpacity>
         </View>
 
@@ -102,10 +120,11 @@ const FoodDetailScreen = (props) => {
         </View>
         <Text className='text-slate-500 mx-5' style={{ fontSize: hp(2), textAlign: 'justify' }}>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</Text>
 
-        {/* Add To Button */}
+        {/* Add To Cart Button */}
         <TouchableOpacity 
           className='sticky bottom-0 bg-[#f9c22d] justify-center items-center rounded-full' 
           style={{ padding: hp(3), zIndex: 999 }}
+          onPress={handleAddToCart}
         >
           <PlusIcon size={24} color='white' />
         </TouchableOpacity>

@@ -7,6 +7,7 @@ import axios from 'axios';
 
 import Categories from '../components/Categories';
 import Foods from '../components/Foods';
+import Trending from '../components/Trending';
 
 const HomeScreen = () => {
   const [activeCategory, setActiveCategory] = useState('Beef');
@@ -92,11 +93,17 @@ const HomeScreen = () => {
           </View>
         </View>
 
+        {/* Trending */}
+        <View>
+          <Trending />
+        </View>
+
         {/* Categories */}
         <View>
           {categories.length > 0 && <Categories categories={categories} activeCategory={activeCategory} handleChangeCategory={handleChangeCategory} />}
         </View>
 
+        {/* Categorywise Foods */}
         <View>
           <Foods foods={foodsData} categories={categories} />
         </View>
