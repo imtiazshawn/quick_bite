@@ -4,6 +4,7 @@ import { StatusBar } from 'expo-status-bar';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { useNavigation } from '@react-navigation/native';
 import { ChevronLeftIcon, MinusIcon, PlusIcon, XMarkIcon } from 'react-native-heroicons/outline';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { useCartStore } from '../../stores/CartStore';
 import Loader from '../components/Loader';
@@ -33,11 +34,52 @@ const CartScreen = () => {
     fetchCartItems();
   }, []);
 
+  // Increase Quantity
+  const incQty = async (item) => {
+    const allCarts = await AsyncStorage.getItem('cartItems');
+    const parsedCarts = JSON.parse(allCarts);
+    const foundItemIndex = parsedCarts.findIndex(cartItem => cartItem.idMeal === item.idMeal);
+
+    if (foundItemIndex !== -1) {
+      parsedCarts[foundItemIndex].quantity += 1;
+      await AsyncStorage.setItem('cartItems', JSON.stringify(parsedCarts));
+
+      useCartStore.setState({ cartItems: parsedCarts });
+
+      return parsedCarts[foundItemIndex];
+    } else {
+      console.log("Item not found");
+      return null;
+    }
+  }
+
+  // Decrease Quantity
+  const decQty = async (item) => {
+    const allCarts = await AsyncStorage.getItem('cartItems');
+    const parsedCarts = JSON.parse(allCarts);
+    const foundItemIndex = parsedCarts.findIndex(cartItem => cartItem.idMeal === item.idMeal);
+
+    if (foundItemIndex !== -1 && parsedCarts[foundItemIndex].quantity > 1) {
+      parsedCarts[foundItemIndex].quantity -= 1;
+      await AsyncStorage.setItem('cartItems', JSON.stringify(parsedCarts));
+
+      useCartStore.setState({ cartItems: parsedCarts });
+
+      return parsedCarts[foundItemIndex];
+    } else if (foundItemIndex !== -1 && parsedCarts[foundItemIndex].quantity === 1) {
+      await handleRemoveToCart(item.idMeal);
+      return null;
+    } else {
+      console.log("Item not found");
+      return null;
+    }
+  }
+
+
+  // Remove From Cart
   const handleRemoveToCart = async (id) => {
-    console.log('Removing item from cart:', id);
     try {
       await removeFromCart(id);
-      console.log('Item removed from cart:', id);
     } catch (error) {
       console.error('Error removing item from cart:', error);
     }
@@ -131,14 +173,14 @@ const CartScreen = () => {
                             style={{ marginVertical: hp(1), width: wp(35) }}
                           >
                             <TouchableOpacity
-                              onPress={() => setQuantity(quantity > 1 ? quantity - 1 : 1)}
+                              onPress={() => decQty(item)}
                               className='bg-[#f0f0f0] p-1 rounded-lg'
                             >
                               <MinusIcon size={24} color='black' />
                             </TouchableOpacity>
-                            <Text className='font-md' style={{ fontSize: hp(2.5), marginHorizontal: hp(2.5) }}>{quantity}</Text>
+                            <Text className='font-md' style={{ fontSize: hp(2.5), marginHorizontal: hp(2.5) }}>{item.quantity}</Text>
                             <TouchableOpacity
-                              onPress={() => setQuantity(quantity + 1)}
+                              onPress={() => incQty(item)}
                               className='bg-[#f0f0f0] p-1 rounded-lg'
                             >
                               <PlusIcon size={24} color='black' />

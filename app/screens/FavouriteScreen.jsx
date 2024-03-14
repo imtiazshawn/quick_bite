@@ -13,18 +13,34 @@ const FavouriteScreen = () => {
   const [quantity, setQuantity] = useState(1);
   const favouriteItems = useFavouriteStore(state => state.favouriteItems);
   const [fadeIn] = useState(new Animated.Value(0));
+  const removeFromFavourite = useFavouriteStore((state) => state.removeFromFavourite);
+  const initFavourite = useFavouriteStore((state) => state.init);
 
   const navigation = useNavigation();
 
   useEffect(() => {
-    console.log(favouriteItems);
+    const fetchFavouriteItems = async () => {
+      await initFavourite();
+      // setLoading(false);
 
-    Animated.timing(fadeIn, {
-      toValue: 1,
-      duration: 1000,
-      useNativeDriver: true,
-    }).start();
+      Animated.timing(fadeIn, {
+        toValue: 1,
+        duration: 1000,
+        useNativeDriver: true,
+      }).start();
+    };
+
+    fetchFavouriteItems();
   }, []);
+
+  // Remove Favourite
+  const handleRemoveToFavourite = async (id) => {
+    try {
+      await removeFromFavourite(id);
+    } catch (error) {
+      console.error('Error removing item from favourite:', error);
+    }
+  }
 
   return (
     <ScrollView className='flex-1 bg-[#fbfbfb]'>
@@ -37,7 +53,7 @@ const FavouriteScreen = () => {
       >
         {/* Avatar */}
         <View className='mx-4 flex-row justify-between items-center mb-2'>
-          <TouchableOpacity 
+          <TouchableOpacity
             className='bg-white p-3 rounded-lg'
             onPress={() => navigation.goBack()}
           >
@@ -49,10 +65,10 @@ const FavouriteScreen = () => {
           </TouchableOpacity>
         </View>
 
-        {/* Cart Item */}
+        {/* Favourite Item */}
         <View className='mx-4 space-y-3'>
           <View>
-            {favouriteItems.length  == 0 ? (
+            {favouriteItems.length == 0 ? (
               <Loader size="large" className='mt-2' />
             ) : (
               <View>
@@ -97,17 +113,18 @@ const FavouriteScreen = () => {
                           {item.strMeal.length > 20
                             ? item.strMeal.slice(0, 20) + '...'
                             : item.strMeal}
-                        </Text>  
+                        </Text>
                         <View className='flex-row items-center'>
                           <Text className='font-semibold text-[#f9c22d]' style={{ fontSize: hp(2.5) }}>$</Text>
                           <Text className='font-semibold' style={{ fontSize: hp(2.5) }}>10.00</Text>
                         </View>
                       </View>
-                        <TouchableOpacity
-                          className='bg-white p-3 rounded-lg'
-                        >
-                          <HeartIcon size={hp(3.5)} strokeWidth={4.5} color='red' />
-                        </TouchableOpacity>
+                      <TouchableOpacity
+                        onPress={() => handleRemoveToFavourite(item.idMeal)}
+                        className='bg-white p-3 rounded-lg'
+                      >
+                        <HeartIcon size={hp(3.5)} strokeWidth={4.5} color='red' />
+                      </TouchableOpacity>
                     </View>
                   </Animated.View>
                 ))}

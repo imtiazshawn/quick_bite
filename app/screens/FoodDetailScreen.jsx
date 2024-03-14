@@ -15,7 +15,8 @@ const FoodDetailScreen = (props) => {
   const [quantity, setQuantity] = useState(1);
   const [isFavourite, setIsFavourite] = useState(false);
   const addToCart = useCartStore((state) => state.addToCart);
-  const favourites = useFavouriteStore((state) => state.favourites);
+  const favourites = useFavouriteStore((state) => state.addToFavourite);
+  const removeFromFavourite = useFavouriteStore((state) => state.removeFromFavourite);
   const initCart = useCartStore((state) => state.init);
 
   const item = props.route.params;
@@ -42,12 +43,16 @@ const FoodDetailScreen = (props) => {
   const handleAddToCart = () => {
     addToCart({ ...item, quantity });
   }
-
+  
   // Add to Favourites
-  const handleFavourites = () => {
-    setIsFavourite(!isFavourite)
-    favourites({ ...item, quantity });
-
+  const handleFavourites = async () => {
+    await setIsFavourite(!isFavourite);
+    
+    if (isFavourite) {
+      await removeFromFavourite(item.idMeal);
+    } else {
+      favourites({ ...item });
+    }
   }
 
   return (
@@ -64,7 +69,7 @@ const FoodDetailScreen = (props) => {
             </TouchableOpacity>
             <TouchableOpacity
               className='bg-white p-3 rounded-lg mr-6'
-              onPress={handleFavourites}
+              onPress={() => handleFavourites()}
             >
               <HeartIcon size={hp(3.5)} strokeWidth={4.5} color={isFavourite ? 'red' : 'gray'} />
             </TouchableOpacity>
