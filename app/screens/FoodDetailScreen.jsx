@@ -4,6 +4,7 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import { ChevronLeftIcon, MinusIcon, PlusIcon } from 'react-native-heroicons/outline';
 import { ClockIcon, FireIcon, HeartIcon } from 'react-native-heroicons/solid';
 import { SafeAreaView } from 'react-native-safe-area-context';
+
 import { useCartStore } from '../../stores/CartStore';
 import { useFavouriteStore } from '../../stores/FavouriteStore';
 
@@ -15,11 +16,13 @@ const FoodDetailScreen = (props) => {
   const [isFavourite, setIsFavourite] = useState(false);
   const addToCart = useCartStore((state) => state.addToCart);
   const favourites = useFavouriteStore((state) => state.favourites);
+  const initCart = useCartStore((state) => state.init);
 
   const item = props.route.params;
 
   useEffect(() => {
     getFoodData(item.idMeal);
+    initCart();
   }, []);
 
   // Meal Data API Fetch
