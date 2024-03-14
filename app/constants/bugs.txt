@@ -1,5 +1,6 @@
 // 1. Plus Icon is not sticky in FoodDetailScreen.
-2. After 'Add to Cart', it's not saving to any storage.
-3. We need 'Remove to Cart' functionality.
+// 2. After 'Add to Cart', it's not saving to any storage.
+// 3. We need 'Remove to Cart' functionality.
 4. increament & decreament food cart.
 5. need 'Remove favourites' functionality.
+// 6. If there is no data on cartPage, it will show 'No Data', also need proper loading

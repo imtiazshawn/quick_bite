@@ -23,7 +23,7 @@ const Foods = ({ foods, categories }) => {
 
       <View>
         {categories.length == 0 || foods.length == 0 ? (
-          <Loader size="large" className='mt-2' />
+          <Loader size="large" color='#f9c22d' className='mt-2' />
         ) : (
           <View>
             {foods && foods.map((item, index) => (
