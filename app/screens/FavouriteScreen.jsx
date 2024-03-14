@@ -11,6 +11,7 @@ import Loader from '../components/Loader';
 
 const FavouriteScreen = () => {
   const [quantity, setQuantity] = useState(1);
+  const [loading, setLoading] = useState(true);
   const favouriteItems = useFavouriteStore(state => state.favouriteItems);
   const [fadeIn] = useState(new Animated.Value(0));
   const removeFromFavourite = useFavouriteStore((state) => state.removeFromFavourite);
@@ -21,7 +22,7 @@ const FavouriteScreen = () => {
   useEffect(() => {
     const fetchFavouriteItems = async () => {
       await initFavourite();
-      // setLoading(false);
+      setLoading(false);
 
       Animated.timing(fadeIn, {
         toValue: 1,
@@ -66,73 +67,80 @@ const FavouriteScreen = () => {
         </View>
 
         {/* Favourite Item */}
-        <View className='mx-4 space-y-3'>
-          <View>
-            {favouriteItems.length == 0 ? (
-              <Loader size="large" className='mt-2' />
-            ) : (
-              <View>
-                {favouriteItems && favouriteItems.map((item, index) => (
-                  <Animated.View key={index} style={{ opacity: fadeIn, width: '100%' }}>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        backgroundColor: 'white',
-                        borderRadius: 20,
-                        shadowColor: '#000',
-                        shadowOffset: {
-                          width: 0,
-                          height: 2,
-                        },
-                        shadowOpacity: 0.25,
-                        shadowRadius: 3.84,
-                        elevation: 5,
-                        marginBottom: 20,
-                        padding: 10,
-                      }}
-                    >
-                      <Image
-                        source={{ uri: item.strMealThumb }}
-                        style={{
-                          width: 100,
-                          height: 100,
-                          borderRadius: 20,
-                          marginRight: 10,
-                        }}
-                      />
-                      <View style={{ flex: 1 }}>
-                        <Text
-                          style={{
-                            fontWeight: 'bold',
-                            fontSize: 16,
-                            color: '#333',
-                            marginBottom: 5,
-                          }}
-                        >
-                          {item.strMeal.length > 20
-                            ? item.strMeal.slice(0, 20) + '...'
-                            : item.strMeal}
-                        </Text>
-                        <View className='flex-row items-center'>
-                          <Text className='font-semibold text-[#f9c22d]' style={{ fontSize: hp(2.5) }}>$</Text>
-                          <Text className='font-semibold' style={{ fontSize: hp(2.5) }}>10.00</Text>
-                        </View>
-                      </View>
-                      <TouchableOpacity
-                        onPress={() => handleRemoveToFavourite(item.idMeal)}
-                        className='bg-white p-3 rounded-lg'
-                      >
-                        <HeartIcon size={hp(3.5)} strokeWidth={4.5} color='red' />
-                      </TouchableOpacity>
-                    </View>
-                  </Animated.View>
-                ))}
-              </View>
-            )}
+        {loading ? (
+          <View style={{ height: hp(80) }} className='items-center justify-center'>
+            <Loader size="large" color='#f9c22d' />
           </View>
-        </View>
-
+        ) : (
+          <View className='mx-4 space-y-3'>
+            <View>
+              {favouriteItems.length == 0 ? (
+                <View style={{ height: hp(80) }} className='items-center justify-center'>
+                  <Text className='text-center'>There is no Favourite</Text>
+                </View>
+              ) : (
+                <View>
+                  {favouriteItems && favouriteItems.map((item, index) => (
+                    <Animated.View key={index} style={{ opacity: fadeIn, width: '100%' }}>
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                          backgroundColor: 'white',
+                          borderRadius: 20,
+                          shadowColor: '#000',
+                          shadowOffset: {
+                            width: 0,
+                            height: 2,
+                          },
+                          shadowOpacity: 0.25,
+                          shadowRadius: 3.84,
+                          elevation: 5,
+                          marginBottom: 20,
+                          padding: 10,
+                        }}
+                      >
+                        <Image
+                          source={{ uri: item.strMealThumb }}
+                          style={{
+                            width: 100,
+                            height: 100,
+                            borderRadius: 20,
+                            marginRight: 10,
+                          }}
+                        />
+                        <View style={{ flex: 1 }}>
+                          <Text
+                            style={{
+                              fontWeight: 'bold',
+                              fontSize: 16,
+                              color: '#333',
+                              marginBottom: 5,
+                            }}
+                          >
+                            {item.strMeal.length > 20
+                              ? item.strMeal.slice(0, 20) + '...'
+                              : item.strMeal}
+                          </Text>
+                          <View className='flex-row items-center'>
+                            <Text className='font-semibold text-[#f9c22d]' style={{ fontSize: hp(2.5) }}>$</Text>
+                            <Text className='font-semibold' style={{ fontSize: hp(2.5) }}>10.00</Text>
+                          </View>
+                        </View>
+                        <TouchableOpacity
+                          onPress={() => handleRemoveToFavourite(item.idMeal)}
+                          className='bg-white p-3 rounded-lg'
+                        >
+                          <HeartIcon size={hp(3.5)} strokeWidth={4.5} color='red' />
+                        </TouchableOpacity>
+                      </View>
+                    </Animated.View>
+                  ))}
+                </View>
+              )}
+            </View>
+          </View>
+        )}
       </ScrollView>
     </ScrollView>
   )

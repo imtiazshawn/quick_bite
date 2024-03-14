@@ -4,6 +4,7 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import { ChevronLeftIcon, MinusIcon, PlusIcon } from 'react-native-heroicons/outline';
 import { ClockIcon, FireIcon, HeartIcon } from 'react-native-heroicons/solid';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { useCartStore } from '../../stores/CartStore';
 import { useFavouriteStore } from '../../stores/FavouriteStore';
@@ -12,9 +13,11 @@ import { useFavouriteStore } from '../../stores/FavouriteStore';
 const FoodDetailScreen = (props) => {
   const [foodData, setFoodData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [hasAddedCart, setHasAddedCart] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [isFavourite, setIsFavourite] = useState(false);
   const addToCart = useCartStore((state) => state.addToCart);
+  const removeFromCart = useCartStore((state) => state.removeFromCart);
   const favourites = useFavouriteStore((state) => state.addToFavourite);
   const removeFromFavourite = useFavouriteStore((state) => state.removeFromFavourite);
   const initCart = useCartStore((state) => state.init);
@@ -24,6 +27,20 @@ const FoodDetailScreen = (props) => {
   useEffect(() => {
     getFoodData(item.idMeal);
     initCart();
+    
+    // Check Item is Added or Not
+    const checkCartAdded = async () => {
+      const allCarts = await AsyncStorage.getItem('cartItems');
+      const parsedCarts = JSON.parse(allCarts);
+      const foundItemIndex = parsedCarts.findIndex(cartItem => cartItem.idMeal === item.idMeal);
+
+      if (foundItemIndex) {
+        setHasAddedCart(false);
+      } else {
+        setHasAddedCart(true);
+      }
+    }
+    checkCartAdded();
   }, []);
 
   // Meal Data API Fetch
@@ -39,15 +56,26 @@ const FoodDetailScreen = (props) => {
     }
   }
 
-  // Add To Cart Functionality
-  const handleAddToCart = () => {
-    addToCart({ ...item, quantity });
+  // Add To Cart
+  const handleAddToCart = async () => {
+    await addToCart({ ...item, quantity });
+    setHasAddedCart(true);
   }
-  
+
+  // Remove From Cart
+  const handleRemoveToCart = async () => {
+    try {
+      await removeFromCart(item.idMeal);
+      setHasAddedCart(false);
+    } catch (error) {
+      console.error('Error removing item from cart:', error);
+    }
+  }
+
   // Add to Favourites
   const handleFavourites = async () => {
     await setIsFavourite(!isFavourite);
-    
+
     if (isFavourite) {
       await removeFromFavourite(item.idMeal);
     } else {
@@ -132,13 +160,23 @@ const FoodDetailScreen = (props) => {
         </SafeAreaView>
       </ScrollView>
       {/* Add To Cart Button */}
-      <TouchableOpacity
-        className='absolute bottom-5 bg-[#f9c22d] justify-center items-center rounded-full'
-        style={{ padding: hp(3), zIndex: 999, left: wp(41.5) }}
-        onPress={handleAddToCart}
-      >
-        <PlusIcon size={24} color='white' />
-      </TouchableOpacity>
+      {!hasAddedCart ? (
+        <TouchableOpacity
+          className='absolute bottom-5 bg-[#f9c22d] justify-center items-center rounded-full'
+          style={{ padding: hp(3), zIndex: 999, left: wp(41.5) }}
+          onPress={() => handleAddToCart()}
+        >
+          <PlusIcon size={24} color='white' />
+        </TouchableOpacity>
+      ) : (
+        <TouchableOpacity
+          className='absolute bottom-5 bg-red-500 justify-center items-center rounded-full'
+          style={{ padding: hp(3), zIndex: 999, left: wp(41.5) }}
+          onPress={() => handleRemoveToCart()}
+        >
+          <MinusIcon size={24} color='white' />
+        </TouchableOpacity>
+      )}
     </View>
   );
 };
