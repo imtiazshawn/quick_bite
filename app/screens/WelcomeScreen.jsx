@@ -25,7 +25,7 @@ const WelcomeScreen = () => {
       {/* Logo  */}
       <Animated.View className='bg-white/50 rounded-full' style={{ padding: animatedPadding }}>
         <View className='bg-white/50 rounded-full' style={{ padding: hp(5.5) }}>
-          <Image source={{ uri: 'https://links.papareact.com/wru'}} style={{ width: wp(40), height: hp(20) }} />
+          <Image source={{ uri: 'https://links.papareact.com/wru'}} style={{ width: wp(40), height: hp(22) }} />
         </View>
       </Animated.View>
 

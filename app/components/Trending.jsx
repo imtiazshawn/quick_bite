@@ -1,5 +1,5 @@
-import { View, Text, FlatList, Image } from 'react-native';
-import React, { useEffect } from 'react';
+import { View, FlatList, Image } from 'react-native';
+import React from 'react';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import slider_01 from '../../assets/sliders/slider_01.jpg';
 import slider_02 from '../../assets/sliders/slider_02.jpg';
@@ -26,10 +26,6 @@ const TrendingData = [
 ];
 
 export default function Slider() {
-  useEffect(() => {
-    console.log('trendingDatas', TrendingData);
-  }, []);
-
   return (
     <View style={{ marginBottom: hp(2.5), paddingHorizontal: hp(2.5) }}>
       <FlatList 

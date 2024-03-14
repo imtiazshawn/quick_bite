@@ -17,7 +17,6 @@ const CartScreen = () => {
 
   useEffect(() => {
     console.log(cartItems);
-    console.log('Can you see the result?');
 
     Animated.timing(fadeIn, {
       toValue: 1,

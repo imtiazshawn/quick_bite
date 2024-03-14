@@ -18,7 +18,6 @@ const FavouriteScreen = () => {
 
   useEffect(() => {
     console.log(favouriteItems);
-    console.log('Can you see the result?');
 
     Animated.timing(fadeIn, {
       toValue: 1,
