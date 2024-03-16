@@ -34,25 +34,25 @@ const FoodDetailScreen = (props) => {
     const checkCartAdded = async () => {
       const allCarts = await AsyncStorage.getItem('cartItems');
       const parsedCarts = JSON.parse(allCarts);
-      const foundItemIndex = parsedCarts.findIndex(cartItem => cartItem.idMeal === item.idMeal);
+      const isItemAdded = parsedCarts.some(cartItem => cartItem.idMeal === item.idMeal);
 
-      if (foundItemIndex) {
-        setHasAddedCart(false);
-      } else {
+      if (isItemAdded) {
         setHasAddedCart(true);
+      } else {
+        setHasAddedCart(false);
       }
-    }
+  }  
 
     // Check If Fav Item is Added or Not
     const checkFavAdded = async () => {
       const allCarts = await AsyncStorage.getItem('favouriteItems');
       const parsedCarts = JSON.parse(allCarts);
-      const foundItemIndex = parsedCarts.findIndex(favouriteItem => favouriteItem.idMeal === item.idMeal);
+      const isItemAdded = parsedCarts.some(favItem => favItem.idMeal === item.idMeal);
 
-      if (foundItemIndex) {
-        setIsFavourite(false);
-      } else {
+      if (isItemAdded) {
         setIsFavourite(true);
+      } else {
+        setIsFavourite(false);
       }
     }
 
