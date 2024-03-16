@@ -21,14 +21,16 @@ const FoodDetailScreen = (props) => {
   const favourites = useFavouriteStore((state) => state.addToFavourite);
   const removeFromFavourite = useFavouriteStore((state) => state.removeFromFavourite);
   const initCart = useCartStore((state) => state.init);
+  const initFav = useFavouriteStore((state) => state.init);
 
   const item = props.route.params;
 
   useEffect(() => {
     getFoodData(item.idMeal);
     initCart();
+    initFav();
     
-    // Check Item is Added or Not
+    // Check If Cart Item is Added or Not
     const checkCartAdded = async () => {
       const allCarts = await AsyncStorage.getItem('cartItems');
       const parsedCarts = JSON.parse(allCarts);
@@ -40,7 +42,22 @@ const FoodDetailScreen = (props) => {
         setHasAddedCart(true);
       }
     }
+
+    // Check If Fav Item is Added or Not
+    const checkFavAdded = async () => {
+      const allCarts = await AsyncStorage.getItem('favouriteItems');
+      const parsedCarts = JSON.parse(allCarts);
+      const foundItemIndex = parsedCarts.findIndex(favouriteItem => favouriteItem.idMeal === item.idMeal);
+
+      if (foundItemIndex) {
+        setIsFavourite(false);
+      } else {
+        setIsFavourite(true);
+      }
+    }
+
     checkCartAdded();
+    checkFavAdded();
   }, []);
 
   // Meal Data API Fetch

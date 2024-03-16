@@ -26,7 +26,7 @@ const CartScreen = () => {
 
       Animated.timing(fadeIn, {
         toValue: 1,
-        duration: 1000,
+        duration: 500,
         useNativeDriver: true,
       }).start();
     };
